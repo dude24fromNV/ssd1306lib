@@ -489,28 +489,15 @@ OLED_err OLED_put_string (OLED *oled, char *letters, uint8_t size, uint8_t start
          /* Limit coordinates to display bounds */
         if ((row>max_row) || (row<0) || (start_x>max_pos_x) || (start_x<0)) return OLED_EBOUNDS;
         
-        count_letters = (max_pos_x - start_x)/width_l;
-        
-        if (count_letters >= size) {
-                /*output a string without transferring*/
-                count_letters = size ;
-                for( uint8_t i = 0; i< count_letters; i++){
-                        OLED_put_letter(oled, *letters, start_x, row, invert);
-                        start_x+=8; 
-                        letters++;
+        /*output a string with transferring*/
+        for( uint8_t i = 0; i< size; i++){
+                if(start_x>120) {
+                        row++;  
+                        start_x=0;
                 }
-        } else {
-                /*output a string with transferring*/
-                for( uint8_t i = 0; i< size; i++){
-                         if(start_x>120) {
-                                row++;  
-                                start_x=0;
-                        }
-                        OLED_put_letter(oled, *letters, start_x, row, invert);
-                        start_x+=8; 
-                        letters++;       
-                }
-               
+                OLED_put_letter(oled, *letters, start_x, row, invert);
+                start_x+=8; 
+                letters++;       
         }
 return OLED_EOK;
 }

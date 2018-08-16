@@ -29,7 +29,7 @@ int main()
         OLED_put_letter(&oled, '!', 80, 5, true); 
 
         OLED_refresh(&oled);
-        char str[]={"hellow it is test! 1234 @ 5678 # 90 $ % ^ & *()_=+- "};
+        char str[]={"hello it is test! 1234 @ 5678 # 90 $ % ^ & *()_=+- work!"};
         char *ptr = str;    
         OLED_put_string(&oled, ptr, sizeof(str)/sizeof(str[0]), 0, 0, false);
         OLED_refresh(&oled);
