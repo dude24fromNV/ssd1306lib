@@ -276,3 +276,38 @@ OLED_err OLED_put_pixel(OLED *oled, uint8_t x, uint8_t y, bool pixel_state);
  * (!) Notice: method is not atomic. If required, protect it with lock
  */
 OLED_err OLED_put_rectangle(OLED *oled, uint8_t x_from, uint8_t y_from, uint8_t x_to, uint8_t y_to, enum OLED_params params);
+
+/* OLED_put_letter() - puts letter at specified coordinates
+ * @oled:       OLED object
+ * @letter:     letter for output
+ * @x:          horizonal coordinate (starting at 0 to 120, left-to-right)
+ * @row:        vertical coordinate (starting at 0 to 7, top-to-bottom)
+ * @invert:     negative of the drawing of the letter     
+ *
+ * These methods are not atomic. If required, protect them with lock, i.e.:
+ * OLED_WITH_SPINLOCK(&oled) { 
+ * ...
+ * }
+ */
+
+OLED_err OLED_put_letter (OLED *oled, char letter, uint8_t start_x, uint8_t row, bool invert);
+
+/* OLED_put_string() - puts string at specified coordinates
+ * @oled:       OLED object
+ * @letters:     pointer to string for output
+ * @x:          horizonal coordinate (starting at 0 to 120, left-to-right)
+ * @row:        vertical coordinate (starting at 0 to 7, top-to-bottom)
+ * @invert:     negative of the drawing of the letter     
+ *
+ * These methods are not atomic. If required, protect them with lock, i.e.:
+ * OLED_WITH_SPINLOCK(&oled) { 
+ * ...
+ * }
+ */
+OLED_err OLED_put_string (OLED *oled, char *letters, uint8_t size, uint8_t start_x, uint8_t row, bool invert);
+
+
+
+
+
+
