@@ -438,12 +438,12 @@ OLED_err OLED_put_rectangle(OLED *oled, uint8_t x_from, uint8_t y_from, uint8_t 
 	return OLED_EOK;
 }
 
-OLED_err OLED_put_letter(OLED *oled, char letter, uint8_t start_x, uint8_t row, bool invert)
+OLED_err OLED_put_letter(OLED *oled, char letter, uint8_t start_x, uint8_t start_y, bool invert)
 {
         const uint8_t max_pos_x =120;
-        const uint8_t max_row = 7;
+        const uint8_t max_pos_y = 55;
         /* Limit coordinates to display bounds */
-        if ((row>max_row) || (start_x>max_pos_x)) return OLED_EBOUNDS;
+        if ((start_y>max_pos_y) || (start_x>max_pos_x) || (start_y<0) || (start_x<0)) return OLED_EBOUNDS;
 
         uint8_t *paddr;
         uint16_t index;
@@ -455,7 +455,7 @@ OLED_err OLED_put_letter(OLED *oled, char letter, uint8_t start_x, uint8_t row, 
                 paddr = &Waree8x8[index];
         } 
         for (uint8_t x = start_x; x < (start_x+8); x++) {
-                for (uint8_t y = row*8; y < (row*8+8); y++) {
+                for (uint8_t y = start_y; y < (start_y+8); y++) {
                         if(!invert){
                                 /*output letter*/
                                 if((*paddr)&(0x01<<shift)){
@@ -473,46 +473,32 @@ OLED_err OLED_put_letter(OLED *oled, char letter, uint8_t start_x, uint8_t row, 
                         }
                         shift++;
                 }
-                shift =0;
+                shift = 0;
                 paddr++;
         }
 return OLED_EOK;
 }
 
-OLED_err OLED_put_string (OLED *oled, char *letters, uint8_t size, uint8_t start_x, uint8_t row, bool invert)
+OLED_err OLED_put_string (OLED *oled, char *letters, uint8_t size, uint8_t start_x, uint8_t start_y, bool invert)
 {
         size-=1; //delete from string \n
-        uint8_t count_letters;       
         const uint8_t max_pos_x =120;
-        const uint8_t max_row = 7;
+        const uint8_t max_pos_y = 55;
         const uint8_t width_l = 8;
          /* Limit coordinates to display bounds */
-        if ((row>max_row) || (row<0) || (start_x>max_pos_x) || (start_x<0)) return OLED_EBOUNDS;
+        if ((start_y>max_pos_y) || (start_y<0) || (start_x>max_pos_x) || (start_x<0)) return OLED_EBOUNDS;
         
         /*output a string with transferring*/
         for( uint8_t i = 0; i< size; i++){
                 if(start_x>120) {
-                        row++;  
+                        start_y+=8;  
                         start_x=0;
                 }
-                OLED_put_letter(oled, *letters, start_x, row, invert);
+                OLED_put_letter(oled, *letters, start_x, start_y, invert);
                 start_x+=8; 
                 letters++;       
         }
 return OLED_EOK;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
